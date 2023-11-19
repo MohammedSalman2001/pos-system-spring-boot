@@ -8,6 +8,7 @@ import com.possystem.possystemapi.repo.CustomerRepo;
 import com.possystem.possystemapi.service.CustomerService;
 import com.possystem.possystemapi.util.Generator;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -78,6 +79,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public List<ResponseCustomerDto> findAll() {
-        return null;
+        List<Customer> all = customerRepo.findAll();
+        return mapper.map(all,new TypeToken<List<ResponseCustomerDto>>(){}.getType());
     }
 }
