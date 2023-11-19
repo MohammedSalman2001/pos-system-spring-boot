@@ -30,9 +30,17 @@ public class CustomerController {
     public ResponseEntity<StandResponse> update(@RequestBody RequestCustomerDto dto){
         ResponseCustomerDto res = customerService.updateCustomer(dto);
         return new ResponseEntity<>(
-                new StandResponse(200,"Customer saved",res), HttpStatus.CREATED
+                new StandResponse(200,"Customer update",res), HttpStatus.CREATED
         );
     }
 
-    
+    @GetMapping(path = "{nic}")
+    public ResponseEntity<StandResponse> find(@PathVariable String nic){
+        ResponseCustomerDto res = customerService.findCustomer(nic);
+        return new ResponseEntity<>(
+                new StandResponse(200,"Customer find",res), HttpStatus.CREATED
+        );
+    }
+
+
 }
