@@ -1,6 +1,8 @@
 package com.possystem.possystemapi.service.impl;
 
 import com.possystem.possystemapi.dto.core.OrderDto;
+import com.possystem.possystemapi.dto.queryInterfaces.OrderDetailsInterface;
+import com.possystem.possystemapi.dto.responseDto.ResponseOrderDetailsDto;
 import com.possystem.possystemapi.entity.Item;
 import com.possystem.possystemapi.entity.OrderDetails;
 import com.possystem.possystemapi.entity.Orders;
@@ -9,8 +11,11 @@ import com.possystem.possystemapi.repo.OrderDetailsRepo;
 import com.possystem.possystemapi.repo.PlaceOrderRepo;
 import com.possystem.possystemapi.service.PlaceOrderService;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @Transactional
@@ -60,6 +65,23 @@ public class PlaceOrderServiceImpl implements PlaceOrderService {
         }
         return null;
 
+    }
+
+    @Override
+    public void delete(String id) {
+        placeOrderRepo.deleteById(id);
+    }
+
+    @Override
+    public List<OrderDto> findAll() {
+        List<Orders> all = placeOrderRepo.findAll();
+       return mapper.map(all,new TypeToken<List<OrderDto>>(){}.getType());
+    }
+
+    @Override
+    public List<ResponseOrderDetailsDto> getOrderDetailsJoinQuery() {
+        List<OrderDetailsInterface> allOrderDetails = placeOrderRepo.getAllOrderDetails();
+        return mapper.map(allOrderDetails, new TypeToken<List<ResponseOrderDetailsDto>>(){}.getType());
     }
 
 
