@@ -6,10 +6,7 @@ import com.possystem.possystemapi.service.CustomerService;
 import com.possystem.possystemapi.util.StandResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/v1/customers")
@@ -24,6 +21,14 @@ public class CustomerController {
     @PostMapping
     public ResponseEntity<StandResponse> save(@RequestBody RequestCustomerDto dto){
         ResponseCustomerDto res = customerService.saveCustomer(dto);
+        return new ResponseEntity<>(
+                new StandResponse(200,"Customer saved",res), HttpStatus.CREATED
+        );
+    }
+
+    @PutMapping
+    public ResponseEntity<StandResponse> update(@RequestBody RequestCustomerDto dto){
+        ResponseCustomerDto res = customerService.updateCustomer(dto);
         return new ResponseEntity<>(
                 new StandResponse(200,"Customer saved",res), HttpStatus.CREATED
         );

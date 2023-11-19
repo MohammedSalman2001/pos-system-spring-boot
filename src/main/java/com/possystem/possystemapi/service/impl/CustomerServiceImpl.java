@@ -48,10 +48,11 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public ResponseCustomerDto updateCustomer(RequestCustomerDto dto) {
         CustomerDto customerDto = mapper.map(dto, CustomerDto.class);
-        String customerId = generator.generateKey("customer");
-        customerDto.setCusId(customerId);
         if(customerRepo.existsByNic(customerDto.getNic())){
-            return mapper.map(customerRepo.save(mapper.map(customerDto, Customer.class)),ResponseCustomerDto.class);
+            System.out.println(customerDto.getName() + customerDto.getNic() +customerDto.getAddress()+ customerDto.getSalary());
+
+            customerRepo.updateCustomer(customerDto.getName(), customerDto.getAddress(), customerDto.getSalary(), customerDto.getNic());
+            return null;
         }else {
             throw new RuntimeException("customer Nic :" + customerDto.getNic() +" Not Found..!");
         }
