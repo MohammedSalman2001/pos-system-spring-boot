@@ -20,5 +20,7 @@ public interface CustomerRepo extends JpaRepository<Customer,String> {
 
     public Customer findByNic(String nic);
 
+    public void  deleteByNic(String nic);
+
 
 }

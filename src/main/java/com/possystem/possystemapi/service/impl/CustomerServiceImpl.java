@@ -59,7 +59,11 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public void deleteCustomer(String nic) {
-
+        if(customerRepo.existsByNic(nic)){
+             customerRepo.deleteByNic(nic);
+        }else{
+            throw new RuntimeException("customer Nic :" + nic +" Not Found..!");
+        }
     }
 
     @Override
