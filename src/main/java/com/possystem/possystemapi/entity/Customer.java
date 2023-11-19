@@ -1,24 +1,24 @@
 package com.possystem.possystemapi.entity;
 
+
 import lombok.*;
 
-import javax.persistence.*;
-import java.util.List;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
+@ToString
 
 @Entity
 public class Customer {
     @Id
-    public String cusId;
-    @Column(unique = true)
-    public String nic;
-    public String name;
-    public String address;
-    public double salary;
+    private String id;
+    private String name;
+    private String address;
+    private double salary;
 
 
 

@@ -18,7 +18,7 @@ public class Orders {
     private  String oid;
     private String date;
     @ManyToOne(cascade = {CascadeType.REFRESH, CascadeType.DETACH})
-    @JoinColumn(name = "customerID", referencedColumnName = "cusId", nullable = false)
+    @JoinColumn(name = "customerID", referencedColumnName = "id", nullable = false)
     private Customer customer;
 
     @OneToMany(mappedBy = "orders", cascade = CascadeType.ALL)

@@ -4,8 +4,6 @@ import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,9 +18,6 @@ public class Item {
     private String description;
     private int qtyOnHand;
     private double unitePrice;
-
-    @OneToMany(mappedBy = "item")
-    private List<OrderDetails> orderDetails;
 
 
 }

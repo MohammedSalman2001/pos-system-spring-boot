@@ -1,5 +1,7 @@
 package com.possystem.possystemapi.service.impl;
 
+
+
 import com.possystem.possystemapi.dto.core.CustomerDto;
 import com.possystem.possystemapi.dto.requestDto.RequestCustomerDto;
 import com.possystem.possystemapi.dto.responseDto.ResponseCustomerDto;
@@ -19,10 +21,10 @@ import java.util.List;
 @Transactional
 public class CustomerServiceImpl implements CustomerService {
 
-
+    @Autowired
     private final CustomerRepo customerRepo;
 
-    private  final ModelMapper mapper;
+    private final ModelMapper mapper;
 
     private final Generator generator;
 
@@ -33,53 +35,51 @@ public class CustomerServiceImpl implements CustomerService {
         this.generator = generator;
     }
 
-    @Override
-    public ResponseCustomerDto saveCustomer(RequestCustomerDto dto) {
-        CustomerDto customerDto = mapper.map(dto, CustomerDto.class);
-        String customerId = generator.generateKey("customer");
-        customerDto.setCusId(customerId);
-        if(!customerRepo.existsByNic(customerDto.getNic())){
-            return mapper.map(customerRepo.save(mapper.map(customerDto, Customer.class)),ResponseCustomerDto.class);
-        }else {
-            throw new RuntimeException("customer Nic :" + customerDto.getNic() +" Already Exist..!");
-        }
 
+    public ResponseCustomerDto saveCustomer(RequestCustomerDto requestCustomerDto) {
+        CustomerDto dto = mapper.map(requestCustomerDto, CustomerDto.class);
+        if (!customerRepo.existsById(dto.getId())) {
+            Customer customer = mapper.map(dto, Customer.class);
+            return mapper.map(customerRepo.save(customer), ResponseCustomerDto.class);
+        }else {
+            throw new RuntimeException("customer" + dto.getId()+ " Already Exist..!");
+        }
     }
 
-    @Override
-    public ResponseCustomerDto updateCustomer(RequestCustomerDto dto) {
-        CustomerDto customerDto = mapper.map(dto, CustomerDto.class);
-        if(customerRepo.existsByNic(customerDto.getNic())){
-            customerRepo.updateCustomer(customerDto.getName(), customerDto.getAddress(), customerDto.getSalary(), customerDto.getNic());
-        return null;
+    public void deleteCustomer(String id) {
+        if(customerRepo.existsById(id)){
+            customerRepo.deleteById(id);
 
         }else {
-            throw new RuntimeException("customer Nic :" + customerDto.getNic() +" Not Found..!");
+            throw new RuntimeException("customer" + id+ " Not found..!");
         }
     }
 
-    @Override
-    public void deleteCustomer(String nic) {
-        if(customerRepo.existsByNic(nic)){
-             customerRepo.deleteByNic(nic);
-        }else{
-            throw new RuntimeException("customer Nic :" + nic +" Not Found..!");
+
+    public ResponseCustomerDto updateCustomer(RequestCustomerDto requestCustomerDto) {
+        CustomerDto customerDto= mapper.map(requestCustomerDto, CustomerDto.class);
+        if (customerRepo.existsById(customerDto.getId())) {
+            Customer customer = mapper.map(customerDto, Customer.class);
+            return mapper.map(customerRepo.save(customer), ResponseCustomerDto.class);
+        }else {
+            throw new RuntimeException("customer" + customerDto.getId()+ " Not found..!");
         }
     }
 
-    @Override
-    public ResponseCustomerDto findCustomer(String nic) {
-        if(customerRepo.existsByNic(nic)){
-            return mapper.map(customerRepo.findByNic(nic),ResponseCustomerDto.class);
-        }else{
-            throw new RuntimeException("customer Nic :" + nic +" Not Found..!");
+
+
+    public ResponseCustomerDto searchCustomer(String id) {
+        if(customerRepo.existsById(id)) {
+            Customer customer = customerRepo.findById(id).get();
+            return mapper.map(customer, ResponseCustomerDto.class);
+        }else {
+            throw new RuntimeException("customer" + id+ " Not found..!");
         }
 
     }
 
-    @Override
-    public List<ResponseCustomerDto> findAll() {
+    public List<ResponseCustomerDto> getAllCustomer() {
         List<Customer> all = customerRepo.findAll();
-        return mapper.map(all,new TypeToken<List<ResponseCustomerDto>>(){}.getType());
+       return mapper.map(all, new TypeToken<List<ResponseCustomerDto>>() {}.getType());
     }
 }
