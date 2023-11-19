@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("api/v1/customers")
 public class CustomerController {
@@ -41,6 +43,15 @@ public class CustomerController {
                 new StandResponse(200,"Customer find",res), HttpStatus.CREATED
         );
     }
+
+    @GetMapping()
+    public ResponseEntity<StandResponse> findAll(){
+        List<ResponseCustomerDto> res = customerService.findAll();
+        return new ResponseEntity<>(
+                new StandResponse(200,"Customer find",res), HttpStatus.CREATED
+        );
+    }
+
 
     @DeleteMapping(params = {"nic"})
     public ResponseEntity<StandResponse> delete(@RequestParam String nic){
