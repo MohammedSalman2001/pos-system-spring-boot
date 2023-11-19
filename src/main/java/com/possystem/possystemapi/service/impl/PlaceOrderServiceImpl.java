@@ -5,6 +5,7 @@ import com.possystem.possystemapi.dto.queryInterfaces.OrderDetailsInterface;
 import com.possystem.possystemapi.dto.responseDto.ResponseOrderDetailsDto;
 import com.possystem.possystemapi.entity.Item;
 import com.possystem.possystemapi.entity.OrderDetails;
+import com.possystem.possystemapi.entity.OrderItem_PK;
 import com.possystem.possystemapi.entity.Orders;
 import com.possystem.possystemapi.repo.ItemRepo;
 import com.possystem.possystemapi.repo.OrderDetailsRepo;
@@ -82,6 +83,36 @@ public class PlaceOrderServiceImpl implements PlaceOrderService {
     public List<ResponseOrderDetailsDto> getOrderDetailsJoinQuery() {
         List<OrderDetailsInterface> allOrderDetails = placeOrderRepo.getAllOrderDetails();
         return mapper.map(allOrderDetails, new TypeToken<List<ResponseOrderDetailsDto>>(){}.getType());
+    }
+
+    @Override
+    public void update(OrderDto dto) {
+
+        if(placeOrderRepo.existsById(dto.getOid())){
+            Orders order = mapper.map(dto, Orders.class);
+            if(dto.getOrderDetails().size()<1)throw new RuntimeException("No item added");
+            for (OrderDetails details:order.getOrderDetails()){
+                Item item = itemRepo.findById(details.getItemCode()).get();
+                OrderDetails orderDetails = orderDetailsRepo.findById(new OrderItem_PK(details.getOid(), details.getItemCode())).get();
+
+                int pevQty = orderDetails.getQty();
+                int newQty = details.getQty();
+                if(newQty>pevQty){
+                    int dif=newQty-pevQty;
+                    item.setQtyOnHand(item.getQtyOnHand()-dif);
+                }else if(newQty<pevQty){
+                    int dif=pevQty-newQty;
+                    item.setQtyOnHand(item.getQtyOnHand()+dif);
+                }
+                itemRepo.save(item);
+            }
+            placeOrderRepo.deleteById(dto.getOid());
+            placeOrderRepo.save(order);
+
+
+        }else {
+            throw  new RuntimeException("Not Found this Id :" +dto.getOid());
+        }
     }
 
 

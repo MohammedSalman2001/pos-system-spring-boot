@@ -16,6 +16,8 @@ public interface PlaceOrderService {
 
     public List<ResponseOrderDetailsDto> getOrderDetailsJoinQuery();
 
+    public  void update(OrderDto dto);
+
 
 
 }

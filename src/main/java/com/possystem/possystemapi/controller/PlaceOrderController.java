@@ -52,5 +52,13 @@ public class PlaceOrderController {
         );
     }
 
+    @PutMapping
+    public ResponseEntity<StandResponse> update (@RequestBody OrderDto dto){
+       placeOrderService.update(dto);
+        return new ResponseEntity<>(
+                new StandResponse(200,"get All",null), HttpStatus.CREATED
+        );
+    }
+
 
 }
