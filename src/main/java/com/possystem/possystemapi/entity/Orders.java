@@ -1,0 +1,28 @@
+package com.possystem.possystemapi.entity;
+
+
+import lombok.*;
+
+import javax.persistence.*;
+import java.util.List;
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+@ToString
+@Entity
+public class Orders {
+
+    @Id
+    private  String oid;
+    private String date;
+    @ManyToOne(cascade = {CascadeType.REFRESH, CascadeType.DETACH})
+    @JoinColumn(name = "customerID", referencedColumnName = "cusId", nullable = false)
+    private Customer customer;
+
+    @OneToMany(mappedBy = "orders", cascade = CascadeType.ALL)
+    private List<OrderDetails> orderDetails;
+
+
+}
