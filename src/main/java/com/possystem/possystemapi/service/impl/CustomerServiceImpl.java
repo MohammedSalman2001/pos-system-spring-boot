@@ -37,18 +37,24 @@ public class CustomerServiceImpl implements CustomerService {
         CustomerDto customerDto = mapper.map(dto, CustomerDto.class);
         String customerId = generator.generateKey("customer");
         customerDto.setCusId(customerId);
-        if(!customerRepo.existsById(customerDto.getCusId())){
-
+        if(!customerRepo.existsByNic(customerDto.getNic())){
             return mapper.map(customerRepo.save(mapper.map(customerDto, Customer.class)),ResponseCustomerDto.class);
         }else {
-            throw new RuntimeException("Customer Duplicate :"+ customerDto.getCusId());
+            throw new RuntimeException("customer Nic :" + customerDto.getNic() +" Already Exist..!");
         }
 
     }
 
     @Override
     public ResponseCustomerDto updateCustomer(RequestCustomerDto dto) {
-        return null;
+        CustomerDto customerDto = mapper.map(dto, CustomerDto.class);
+        String customerId = generator.generateKey("customer");
+        customerDto.setCusId(customerId);
+        if(customerRepo.existsByNic(customerDto.getNic())){
+            return mapper.map(customerRepo.save(mapper.map(customerDto, Customer.class)),ResponseCustomerDto.class);
+        }else {
+            throw new RuntimeException("customer Nic :" + customerDto.getNic() +" Not Found..!");
+        }
     }
 
     @Override
