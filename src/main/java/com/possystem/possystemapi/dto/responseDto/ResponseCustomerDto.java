@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class ResponseCustomerDto {
-
+    public String cusId;
     public String name;
     public String nic;
     public String address;
