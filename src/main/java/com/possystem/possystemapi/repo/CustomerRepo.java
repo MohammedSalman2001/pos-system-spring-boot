@@ -17,4 +17,8 @@ public interface CustomerRepo extends JpaRepository<Customer,String> {
     @Modifying
     @Query(nativeQuery = true, value = "UPDATE  customer SET name=?,address=?,salary=? WHERE nic=?")
     public void updateCustomer(String name,String address,double salary,String nic);
+
+    public Customer findByNic(String nic);
+
+
 }

@@ -49,10 +49,9 @@ public class CustomerServiceImpl implements CustomerService {
     public ResponseCustomerDto updateCustomer(RequestCustomerDto dto) {
         CustomerDto customerDto = mapper.map(dto, CustomerDto.class);
         if(customerRepo.existsByNic(customerDto.getNic())){
-            System.out.println(customerDto.getName() + customerDto.getNic() +customerDto.getAddress()+ customerDto.getSalary());
-
             customerRepo.updateCustomer(customerDto.getName(), customerDto.getAddress(), customerDto.getSalary(), customerDto.getNic());
-            return null;
+        return null;
+
         }else {
             throw new RuntimeException("customer Nic :" + customerDto.getNic() +" Not Found..!");
         }
@@ -65,7 +64,12 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public ResponseCustomerDto findCustomer(String nic) {
-        return null;
+        if(customerRepo.existsByNic(nic)){
+            return mapper.map(customerRepo.findByNic(nic),ResponseCustomerDto.class);
+        }else{
+            throw new RuntimeException("customer Nic :" + nic +" Not Found..!");
+        }
+
     }
 
     @Override
