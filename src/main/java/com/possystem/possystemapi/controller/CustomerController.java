@@ -42,5 +42,13 @@ public class CustomerController {
         );
     }
 
+    @DeleteMapping(params = {"nic"})
+    public ResponseEntity<StandResponse> delete(@RequestParam String nic){
+         customerService.deleteCustomer(nic);
+        return new ResponseEntity<>(
+                new StandResponse(200,"delete find",null), HttpStatus.CREATED
+        );
+    }
+
 
 }
