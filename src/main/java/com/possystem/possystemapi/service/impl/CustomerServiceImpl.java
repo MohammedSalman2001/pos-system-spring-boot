@@ -37,7 +37,13 @@ public class CustomerServiceImpl implements CustomerService {
         CustomerDto customerDto = mapper.map(dto, CustomerDto.class);
         String customerId = generator.generateKey("customer");
         customerDto.setCusId(customerId);
-       return mapper.map(customerRepo.save(mapper.map(customerDto, Customer.class)),ResponseCustomerDto.class);
+        if(!customerRepo.existsById(customerDto.getCusId())){
+
+            return mapper.map(customerRepo.save(mapper.map(customerDto, Customer.class)),ResponseCustomerDto.class);
+        }else {
+            throw new RuntimeException("Customer Duplicate :"+ customerDto.getCusId());
+        }
+
     }
 
     @Override
